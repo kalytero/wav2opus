@@ -1,4 +1,4 @@
-package goaudiosuite
+package wav2opus
 
 // WAVToOpus WAVデータをOpusにエンコードします
 //

@@ -1,4 +1,4 @@
-package goaudiosuite
+package wav2opus
 
 // PCMResample PCMデータを指定されたサンプリングレートにリサンプルします
 // 線形補間を利用して、新しいサンプル間のデータを計算します
