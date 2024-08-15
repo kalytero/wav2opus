@@ -14,11 +14,12 @@ import (
 //	sampleRate: PCMデータのサンプリングレート
 //	frameSizeMs: 各フレームの時間（ミリ秒単位）
 //	opusOutput: エンコードされたOpusデータを送信するためのチャネル
+//	autoChannelClose: エンコード後に、チャンネルを自動で閉じるかどうか
 //
 // 戻り値:
 //
 //	エンコード中に発生したエラー（ある場合）
-func PCMToOpus(pcmData []int16, sampleRate int, channels int, frameSizeMs int, opusOutput chan []byte) error {
+func PCMToOpus(pcmData []int16, sampleRate int, channels int, frameSizeMs int, opusOutput chan []byte, autoChannelClose bool) error {
 	var pcmDataSize = len(pcmData)
 	var opusEncoder *opus.Encoder
 	var opusBuffer []byte
@@ -41,7 +42,9 @@ func PCMToOpus(pcmData []int16, sampleRate int, channels int, frameSizeMs int, o
 			opusOutput <- opusBuffer[:opusSize]
 			time.Sleep(time.Duration(frameSizeMs) * time.Millisecond) // コードによっては不必要かも
 		}
-		close(opusOutput) // ここも同様に、コードによっては不必要かも
+		if autoChannelClose {
+			close(opusOutput) // ここも同様に、コードによっては不必要かも
+		}
 	} else {
 		return err
 	}
